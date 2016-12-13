@@ -30,19 +30,20 @@ gradient <- function(theta, x, y){
   beta <- theta[2]
   
   e <- 0.0001
-  diff <- rep(NA,d)
+  diff <- rep(NA,2,d)
   for(k in 1:d){
     alpha_hi <- alpha
     alpha_lo <- alpha
     alpha_hi[k] <- alpha[k] +e
     alpha_lo[k] <- alpha[k] -e
-    diff_alpha[k] <- (log_post(alpha_hi,x,y) - log_post(alpha_lo,x,y))/(2*e)
     
     beta_hi <- beta
     beta_lo <- beta
     beta_hi[k] <- beta[k] +e
     beta_lo[k] <- beta[k] -e
-    diff_beta[k] <- (log_post(beta_hi,x,y) - log_post(beta_lo,x,y))/(2*e)
+    
+    diff[1,k] <- (log_post(alpha_hi,x,y) - log_post(alpha_lo,x,y))/(2*e)
+    diff[2,k] <- (log_post(beta_hi,x,y) - log_post(beta_lo,x,y))/(2*e)
 
   }
   return(diff_alpha, diff_beta)
@@ -55,7 +56,7 @@ hmc_iteration <- function(theta,x,y,epsilon,L,M){
   phi <- rnorm(d,0,sqrt(M))
   theta_old <- theta
   log_p_old <- log_post(theta,x,y) - 0.5*sum(M_inv*phi^2)
-  phi <- phi + 0.5*epsilon*gradient(beta,x,y,n)
+  phi <- phi + 0.5*epsilon*gradient(theta,x,y)
   for(l in 1:L){
     theta <- theta + epsilon*M_inv*phi
     phi <- phi + (if(l == L)0.5 else 1)*epsilon*gradient(theta,x,y)
