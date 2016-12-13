@@ -49,23 +49,23 @@ gradient <- function(theta, x, y){
 }
 
 #function for a single iteration of HMC
-hmc_iteration <- function(beta,x,y,n,epsilon,L,M){
+hmc_iteration <- function(theta,x,y,epsilon,L,M){
   M_inv <- 1/M
-  d <- length(beta)
+  d <- length(theta)
   phi <- rnorm(d,0,sqrt(M))
-  beta_old <- beta
-  log_p_old <- log_post(beta,x,y,n) - 0.5*sum(M_inv*phi^2)
+  theta_old <- theta
+  log_p_old <- log_post(theta,x,y) - 0.5*sum(M_inv*phi^2)
   phi <- phi + 0.5*epsilon*gradient(beta,x,y,n)
   for(l in 1:L){
-    beta <- beta + epsilon*M_inv*phi
-    phi <- phi + (if(l == L)0.5 else 1)*epsilon*gradient(beta,x,y,n)
+    theta <- theta + epsilon*M_inv*phi
+    phi <- phi + (if(l == L)0.5 else 1)*epsilon*gradient(theta,x,y)
   }
   phi <- -phi
-  log_post_star <- log_post(beta,x,y,n) - 0.5*sum(M_inv*phi^2)
+  log_post_star <- log_post(theta,x,y) - 0.5*sum(M_inv*phi^2)
   r <- exp(log_post_star - log_p_old)
   if(is.nan(r)) r <- 0
   p_jump <- min(r,1)
-  beta_new <- if(runif(1) < p_jump) beta else beta_old
+  theta_new <- if(runif(1) < p_jump) theta else theta_old
   return(list(beta = beta_new, p_jump = p_jump))
 }
 
