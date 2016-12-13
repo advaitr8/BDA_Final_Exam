@@ -46,7 +46,7 @@ gradient <- function(theta, x, y){
     diff[2,k] <- (log_post(beta_hi,x,y) - log_post(beta_lo,x,y))/(2*e)
 
   }
-  return(diff_alpha, diff_beta)
+  return(diff)
 }
 
 #function for a single iteration of HMC
@@ -99,3 +99,16 @@ hmc_run <- function(starting_values, iter, epsilon_0, L_0, M){
 parameter_names <- c (paste ("beta[",1:2,"]",sep=""))
 d <- length(parameter_names)
 chains <- 4
+
+starts <- array (NA,c(chains,d),dimnames=list(NULL,parameter_names))
+for (j in 1:chains){
+  starts[j,] <- rnorm (d,0,15)
+  starts[j,2] <- runif (1,0,15)
+}
+
+#65% acceptance rate due to mass vector
+fit1 <- hmc_run (starting_values = starts, 
+                 iter = 2000,
+                 epsilon_0 = .095, 
+                 L_0 = 10, 
+                 M = mass_vector)
