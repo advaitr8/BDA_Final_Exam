@@ -24,18 +24,28 @@ log_post <- function(theta, x, y){
 }
 
 #function for gradient
-gradient <- function(beta, x, y, n){
-  d <- length(beta)
+gradient <- function(theta, x, y){
+  d <- length(theta)
+  alpha <- theta[1]
+  beta <- theta[2]
+  
   e <- 0.0001
   diff <- rep(NA,d)
   for(k in 1:d){
+    alpha_hi <- alpha
+    alpha_lo <- alpha
+    alpha_hi[k] <- alpha[k] +e
+    alpha_lo[k] <- alpha[k] -e
+    diff_alpha[k] <- (log_post(alpha_hi,x,y) - log_post(alpha_lo,x,y))/(2*e)
+    
     beta_hi <- beta
     beta_lo <- beta
     beta_hi[k] <- beta[k] +e
     beta_lo[k] <- beta[k] -e
-    diff[k] <- (log_post(beta_hi,x,y,n) - log_post(beta_lo,x,y,n))/(2*e)
+    diff_beta[k] <- (log_post(beta_hi,x,y) - log_post(beta_lo,x,y))/(2*e)
+
   }
-  return(diff)
+  return(diff_alpha, diff_beta)
 }
 
 #function for a single iteration of HMC
