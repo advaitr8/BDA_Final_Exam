@@ -26,24 +26,16 @@ log_post <- function(theta, x, y){
 #function for gradient
 gradient <- function(theta, x, y){
   d <- length(theta)
-  alpha <- theta[1]
-  beta <- theta[2]
   
   e <- 0.0001
-  diff <- rep(NA,2,d)
+  diff <- rep(NA,d)
   for(k in 1:d){
-    alpha_hi <- alpha
-    alpha_lo <- alpha
-    alpha_hi[k] <- alpha[k] +e
-    alpha_lo[k] <- alpha[k] -e
+    theta_hi <- theta
+    theta_lo <- theta
+    theta_hi[k] <- theta[k] +e
+    theta_lo[k] <- theta[k] -e
     
-    beta_hi <- beta
-    beta_lo <- beta
-    beta_hi[k] <- beta[k] +e
-    beta_lo[k] <- beta[k] -e
-    
-    diff[1,k] <- (log_post(alpha_hi,x,y) - log_post(alpha_lo,x,y))/(2*e)
-    diff[2,k] <- (log_post(beta_hi,x,y) - log_post(beta_lo,x,y))/(2*e)
+    diff[k] <- (log_post(theta_hi,x,y) - log_post(theta_lo,x,y))/(2*e)
 
   }
   return(diff)
