@@ -20,7 +20,7 @@ log_post <- function(theta, x, y){
   
   log_likelihood <- sum(dgamma(y, shape = alpha, rate = beta*x, log = TRUE))
   
-  return(log_prior + log_likelihood)
+  return(log_prior_a + log_prior_b + log_likelihood)
 }
 
 #function for gradient
