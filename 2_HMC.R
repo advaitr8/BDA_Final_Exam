@@ -12,8 +12,8 @@ log_post <- function(theta, x, y){
   alpha <- theta[1]
   beta <- theta[2]
   
-  param_prior_a <- dnorm(alpha, log(5), log(2),log = TRUE)
-  param_prior_b <- dnorm(beta, log(0.1), log(10), log = TRUE)
+  param_prior_a <- dlnorm(alpha, log(5), log(2),log = TRUE)
+  param_prior_b <- dlnorm(beta, log(0.1), log(10), log = TRUE)
   
   log_prior_a <- sum(param_prior_a)
   log_prior_b <- sum(param_prior_b)
@@ -59,7 +59,7 @@ hmc_iteration <- function(theta,x,y,epsilon,L,M){
   if(is.nan(r)) r <- 0
   p_jump <- min(r,1)
   theta_new <- if(runif(1) < p_jump) theta else theta_old
-  return(list(beta = beta_new, p_jump = p_jump))
+  return(list(theta = theta_new, p_jump = p_jump))
 }
 
 #running HMC the appropriate number of iterations
@@ -71,14 +71,14 @@ hmc_run <- function(starting_values, iter, epsilon_0, L_0, M){
   warmup <- 0.5*iter
   p_jump <- array(NA, c(iter,chains))
   for(j in 1:chains){
-    beta <- starting_values[j,]
+    theta <- starting_values[j,]
     for(t in 1:iter){
       epsilon <- runif(1,0,2*epsilon_0)
       L <- ceiling(2*L_0*runif(1))
-      temp <- hmc_iteration(beta,x,y,n,epsilon,L,M)
+      temp <- hmc_iteration(theta,x,y,epsilon,L,M)
       p_jump[t,j] <- temp$p_jump
-      sims[t,j,] <- temp$beta
-      beta <- temp$beta
+      sims[t,j,] <- temp$theta
+      theta <- temp$theta
     }
   }
   monitor(sims,warmup)
@@ -88,21 +88,26 @@ hmc_run <- function(starting_values, iter, epsilon_0, L_0, M){
 }
 
 #running HMC for 4 chains to check acceptance rates
-parameter_names <- c (paste ("beta[",1:2,"]",sep=""))
+parameter_names <- c("alpha", "beta")
 d <- length(parameter_names)
 chains <- 4
 
-mass_vector <- rep(0.0093, d)
+mass_vector <- rep(10, d)
 
-starts <- array (NA,c(chains,d),dimnames=list(NULL,parameter_names))
+starts <- array (NA, c(chains,d),
+                 dimnames=list(NULL,parameter_names))
 for (j in 1:chains){
-  starts[j,] <- rnorm (d,0,15)
-  starts[j,2] <- runif (1,0,15)
+  starts[j,] <- runif (d,0,1)
+  starts[j,2] <- runif (1,0,1)
 }
 
-#65% acceptance rate due to mass vector
-fit1 <- hmc_run (starting_values = starts, 
-                 iter = 2000,
-                 epsilon_0 = .095, 
-                 L_0 = 10, 
-                 M = mass_vector)
+#create fake data
+N <- 100
+x <- exp(rnorm(N, 0, 1))
+y <- rgamma(N, 2, 0.3*x)
+
+fit1 <- hmc_run(starting_values=starts, 
+              iter = 2000,
+              epsilon_0 = .08, 
+              L_0 = 14, 
+              M = mass_vector)
