@@ -92,7 +92,7 @@ parameter_names <- c (paste ("beta[",1:2,"]",sep=""))
 d <- length(parameter_names)
 chains <- 4
 
-mass_vector <- matrix(0.0093,2, d)
+mass_vector <- matrix(0.0093, d)
 
 starts <- array (NA,c(chains,d),dimnames=list(NULL,parameter_names))
 for (j in 1:chains){
