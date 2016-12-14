@@ -1,3 +1,7 @@
+library(rstan)
+library(beepr)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
 setwd("C:/Users/Julian Bautista/Documents/School Stuff/Semesters/4 Fall 2016/Applied Statistics III/Final Exam/BDA_Final_Exam")
 
 
