@@ -6,12 +6,12 @@ data{
 }
 
 parameters{
-  real alpha;
+  real alpha[49];
   real beta;
 }
 
 model{
   for(i in 1:N){
-   party[i] ~ bernoulli_logit(alpha[state_id[i]] + beta*marital[i]) 
+   party[i] ~ bernoulli_logit(alpha[state_id[i]] + beta*marital[i]); 
   }
 }
