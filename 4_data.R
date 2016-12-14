@@ -41,3 +41,4 @@ state_id <- marriage$id
 party <- marriage$party
 marital <- marriage$marital
 state <- levels(marriage$state)
+N <- length(party)
