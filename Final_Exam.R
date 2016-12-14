@@ -1,3 +1,4 @@
+library(arm)
 library(rstan)
 library(beepr)
 rstan_options(auto_write = TRUE)

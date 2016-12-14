@@ -1,9 +1,3 @@
-#number 3
-theta <- seq(0.01,0.99, 0.01)
-sigma <- 
-
-y <- rnorm(theta, sigma)
-
 #number 2
 
 #function that gets the log posterior
