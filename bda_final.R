@@ -192,6 +192,11 @@ fit3
 
 #(c) Mathematically prove the result in (b).
 
+#####################################################
+#                                                   #
+#                   Question Four                   #
+#                                                   #
+#####################################################
 
 #The file at http://www.stat.columbia.edu/~gelman/bda.course/pew_research_center_ june_elect_wknd_data.dta has data from Pew Research Center polls taken during the 2008 election campaign. (If you don’t remember how to read a .dta file in R, Google it.) Use hierarchical modeling to estimate how the marriage gap (the difference between Obama’s vote share among married people, compared to all other people) varied by state (excluding Alaska and Hawaii). To get vote intention, use the variable heat2 where it is available and heat4 where it is available. Consider only respondents who expressed an intention or leaning to vote for the Democratic or Republican candidate. Use a hierarchical logistic regression predicting vote intention given state and an indicator for being married. Fit the model in Stan and check that the chains have mixed.
 
@@ -209,16 +214,19 @@ marriage <- data.frame(
                  as.character(pew$heat4))
 )
 
+
 #drop third parties
 marriage <- marriage[as.character(marriage$party) == "dem/lean dem"
                      | as.character(marriage$party) == "rep/lean rep",]
 
 #drop hawaii and  alaska
 marriage <- marriage[marriage$state != "hawaii" 
-                    & marriage$state != "alaska",]
-elect <- filter(elect, 
-                state != "Hawaii" 
-                & state != "Alaska")
+                    & marriage$state != "alaska"
+                    & marriage$state != "washington dc",]
+
+elect <- elect[elect$state != "Hawaii" 
+               & elect$state != "Alaska"
+               & elect$state != "District of Columbia",]
 
 #Get rid of NAs in marriage and dem
 marriage <- marriage[is.na(marriage$marital) == FALSE,]
@@ -245,7 +253,7 @@ mar.state <- ddply(marriage,
                    mar = mean(mar),
                    obama.vote = mean(dem))
 
-mar.state$id <- c(1:49)
+mar.state$id <- c(1:48)
 
 mar_pred <- mar.state$mar
 state_id_pred <- mar.state$id
