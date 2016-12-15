@@ -17,5 +17,5 @@ source("4_data.R") #data manipulation
 stanc("logistic.stan")$status
 fit1 <- stan("logistic.stan",
              data = c("N","marital","state_id","party"),
-             iter = 3000, chains = 3)
+             iter = 1000, chains = 3)
 
