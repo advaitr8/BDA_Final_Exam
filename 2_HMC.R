@@ -100,7 +100,7 @@ N <- 100
 x <- exp(rnorm(N, 0, 1))
 y <- rgamma(N, 2, 0.3*x)
 
-fit1 <- hmc_run(starting_values=starts, 
+fit_hmc <- hmc_run(starting_values=starts, 
               iter = 2000,
               epsilon_0 = .08, 
               L_0 = 14, 
