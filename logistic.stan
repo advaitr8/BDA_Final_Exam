@@ -6,8 +6,8 @@ data{
 }
 
 parameters{
-  real alpha[49];
-  real beta[49];
+  real alpha[48];
+  real beta[48];
   real mu_a;
   real mu_b;
   real<lower = 0> sigma_a;

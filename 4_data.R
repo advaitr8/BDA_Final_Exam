@@ -19,8 +19,8 @@ marriage <- rbind(pop,pop2)
 marriage <- filter(marriage, party == "rep/lean rep" | party == "dem/lean dem")
 
 #drop hawaii and  alaska
-marriage <- filter(marriage, state != "hawaii" & state != "alaska")
-elect <- filter(elect, state != "Hawaii" & state != "Alaska")
+marriage <- filter(marriage, state != "hawaii" & state != "alaska" & state != "washington dc")
+elect <- filter(elect, state != "Hawaii" & state != "Alaska" & state != "District of Columbia")
 
 #0 if republican, 1 if democrat; 0 if not married, 1 if married
 marriage$party <- ifelse(marriage$party == "rep/lean rep", 0,1)
@@ -53,4 +53,4 @@ simpleCap <- function(x) {
         sep="", collapse=" ")
 }
 state <- sapply(state, simpleCap)
-state[8] <- "Washington DC"
+#state[8] <- "Washington DC"
