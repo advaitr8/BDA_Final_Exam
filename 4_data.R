@@ -30,6 +30,9 @@ marriage$marital <- ifelse(marriage$marital == "married", 1,0)
 marriage$state <- factor(marriage$state)
 marriage$id <- as.numeric(marriage$state)
 
+#drop NAs
+marriage <- marriage[complete.cases(marriage$marital),]
+
 #removes index 
 #rowname(marriage) <- NULL
 
