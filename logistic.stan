@@ -3,6 +3,8 @@ data{
   int<lower = 0, upper = 1> marital[N];
   int<lower = 0, upper = 1> party[N];
   int<lower = 0> state_id[N];
+  int<lower = 0> state_id_pred[N];
+  real<lower = 0> mar_pred[48];
 }
 
 parameters{
