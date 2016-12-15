@@ -103,5 +103,5 @@ y <- rgamma(N, 2, 0.3*x)
 fit_hmc <- hmc_run(starting_values=starts, 
               iter = 2000,
               epsilon_0 = .08, 
-              L_0 = 14, 
+              L_0 = 13, 
               M = mass_vector)
