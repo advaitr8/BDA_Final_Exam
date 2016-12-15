@@ -18,7 +18,7 @@ parameters{
 
 model{
   for(i in 1:N){
-   party[i] ~ bernoulli_logit(alpha[state_id[i]] + beta[state_id[i]]*marital[state_id[i]]); 
+   party[i] ~ bernoulli_logit(alpha[state_id[i]] + beta[state_id[i]]*marital[i]); 
   }
   alpha ~ normal(mu_a, sigma_a);
   beta ~ normal(mu_b, sigma_b);
