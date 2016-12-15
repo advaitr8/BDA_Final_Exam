@@ -21,7 +21,7 @@ model{
   alpha ~ normal(mu_a, sigma_a);
   beta ~ normal(mu_b, sigma_b);
   mu_a ~ normal(0,2);
-  mu_b ~ normal(-2,2);
-  sigma_a ~ normal(0.5,3);
-  sigma_b ~ normal(0.5,3);
+  mu_b ~ normal(-0.5,2);
+  sigma_a ~ normal(3,3);
+  sigma_b ~ normal(3,3);
 }
