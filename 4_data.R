@@ -61,3 +61,6 @@ simpleCap <- function(x) {
 }
 state <- sapply(state, simpleCap)
 #state[8] <- "Washington DC"
+
+#remove attributes of state
+attributes(state) <- NULL
