@@ -1,0 +1,35 @@
+data{
+  int N;
+  vector[N] marital;
+  int dem[N];
+  int state_id[N];
+  vector[48] mar_pred;
+  int state_id_pred[48];
+}
+parameters{
+  vector[48] beta;
+  vector[48] alpha;
+  real mu_alpha;
+  real<lower = 0> tau_alpha;
+  real mu_beta;
+  real<lower = 0> tau_beta;
+}
+model{
+  for(i in 1:N){
+    dem[i] ~ bernoulli_logit(alpha[state_id[i]] 
+    + beta[state_id[i]]*marital[i]);
+  }
+ alpha ~ normal(mu_alpha, tau_alpha);
+ beta ~ normal(mu_beta, tau_beta);
+ mu_alpha ~ normal(0.5, 2);
+ mu_beta ~ normal(-0.5, 2);
+ tau_alpha ~ normal(2, 3);
+ tau_beta ~ normal(2, 3);
+}
+generated quantities{
+  vector[48] vote_pred;
+  for(i in 1:48){
+    vote_pred[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
+    + beta[state_id_pred[i]]*mar_pred[i]));
+  }
+}
