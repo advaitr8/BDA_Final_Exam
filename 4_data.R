@@ -42,3 +42,12 @@ party <- marriage$party
 marital <- marriage$marital
 state <- levels(marriage$state)
 N <- length(party)
+
+#create a function to capitalize letters of first word of state
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+state <- sapply(state, simpleCap)
+state[8] <- "Washington DC"

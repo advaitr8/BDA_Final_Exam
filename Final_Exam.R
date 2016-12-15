@@ -13,7 +13,7 @@ source("2_HMC.R")
 
 
 #number 4
-source("4_data.R")
+source("4_data.R") #data manipulation
 stanc("logistic.stan")$status
 fit1 <- stan("logistic.stan",
              data = c("N","marital","state_id","party"),
