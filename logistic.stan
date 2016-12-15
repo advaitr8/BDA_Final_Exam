@@ -25,3 +25,11 @@ model{
   sigma_a ~ normal(3,3);
   sigma_b ~ normal(3,3);
 }
+
+generated quantities{
+  vector[48] vote_pred;
+  for(i in 1:48){
+    vote_pred[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
+    + beta[state_id_pred[i]]*mar_pred[i]));
+  }
+}

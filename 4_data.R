@@ -39,12 +39,19 @@ marriage <- marriage[complete.cases(marriage$marital),]
 #removing excess data.frames
 rm("pop","pop2","pew")
 
+
+#create pred variables for generated quantities
+preds <- marriage %>% group_by(state) %>% summarise(party_pred = mean(party), mar_pred = mean(marital))
+
 #creating variables
 state_id <- marriage$id
 party <- marriage$party
 marital <- marriage$marital
 state <- levels(marriage$state)
 N <- length(party)
+party_pred <- preds$party_pred
+mar_pred <- preds$mar_pred
+state_id_pred <- c(1:48)
 
 #create a function to capitalize letters of first word of state
 simpleCap <- function(x) {
