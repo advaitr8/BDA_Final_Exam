@@ -22,7 +22,7 @@ stanc("logistic.stan")$status
 fit1 <- stan("logistic.stan",
              data = c("N","marital","state_id","party", 
                       "state_id_pred", "mar_pred"),
-             iter = 1000, chains = 4)
+             iter = 3000, chains = 4)
 
 #create objects for plotting
 fitted <- extract(fit1)
