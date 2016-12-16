@@ -12,9 +12,28 @@ setwd("C:/Users/Julian Bautista/Documents/School Stuff/Semesters/4 Fall 2016/App
 source("2_HMC.R")
 
 #number 3 simulation
-theta <- runif(1,0,1)
-sig <- 10
-y <- rnorm(1,theta,sig)
+#Generate fake data:
+size <- 1
+theta <- 0.99
+sigma <- 10000
+
+mle <- NULL
+y <- rnorm(size, theta, sigma)
+y <- ifelse(y < 0, 0, 
+            ifelse(y > 1, 1, y))
+mle <- (y - theta)^2
+
+#Simulate in Stan
+bayes <- NULL
+simulation <- stan("q_3_stan.stan",
+             data = list("size", "y", "sigma"),
+             chains = 3, iter = 100)
+bayes <- (mean(extract(simulation)$theta) - theta)^2
+
+#Show difference between MLE and Bayes
+mle 
+bayes
+mle - bayes
 
 #number 4
 source("4_data.R") #data manipulation

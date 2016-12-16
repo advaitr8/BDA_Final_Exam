@@ -59,5 +59,10 @@ generated quantities{
   //gap partial pooling model
   for(i in 1:48){
     gap_pool_pred = inv_logit(alpha_pool + beta_pool) - inv_logit(alpha_pool);
-  }  
+  }
+  //posterior predictive check
+  for(i in 1:N){
+    vote_pred[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
+    + beta[state_id[i]]*marital[i]));
+  }
 }
