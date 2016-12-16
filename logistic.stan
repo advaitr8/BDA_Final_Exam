@@ -10,7 +10,7 @@ data{
 parameters{
   real alpha[48];
   real beta[48];
-  real alpha_pool[48];
+  real alpha_pool;
   real beta_pool;
   real mu_a;
   real mu_b;
@@ -25,7 +25,7 @@ model{
   }
   //complete pooling model
   for(i in 1:N){
-    party[i] ~ bernoulli_logit(alpha_pool[state_id[i]] + beta_pool*marital[i]);  
+    party[i] ~ bernoulli_logit(alpha_pool + beta_pool*marital[i]);  
   }
   alpha ~ normal(mu_a, sigma_a);
   beta ~ normal(mu_b, sigma_b);
@@ -54,7 +54,7 @@ generated quantities{
   
   //pred complete pooling model
   for(i in 1:48){
-    pool_pred[i] = bernoulli_rng(inv_logit(alpha_pool[state_id_pred[i]] 
+    pool_pred[i] = bernoulli_rng(inv_logit(alpha_pool 
     + beta_pool*mar_pred[i]));
   }
   //gap partial pooling model

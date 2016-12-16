@@ -81,6 +81,11 @@ hmc_run <- function(starting_values, iter, epsilon_0, L_0, M){
   return(list(sims = sims, p_jump = p_jump))
 }
 
+#create fake data
+N <- 100
+x <- exp(rnorm(N, 0, 1))
+y <- rgamma(N, 2, 0.3*x)
+
 #running HMC for 4 chains to check acceptance rates
 parameter_names <- c("alpha", "beta")
 d <- length(parameter_names)
@@ -95,13 +100,8 @@ for (j in 1:chains){
   starts[j,2] <- runif (1,0,1)
 }
 
-#create fake data
-N <- 100
-x <- exp(rnorm(N, 0, 1))
-y <- rgamma(N, 2, 0.3*x)
-
 fit_hmc <- hmc_run(starting_values=starts, 
-              iter = 2000,
+              iter = 4000,
               epsilon_0 = .08, 
               L_0 = 13, 
               M = mass_vector)
