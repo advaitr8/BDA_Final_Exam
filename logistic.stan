@@ -41,6 +41,7 @@ generated quantities{
   vector[48] vote_pred;
   vector[48] pool_pred;
   vector[48] gap_pred;
+  vector[N] indv_vote;
   real gap_pool_pred;
   //pred partial pooling model
   for(i in 1:48){
@@ -62,7 +63,7 @@ generated quantities{
   }
   //posterior predictive check
   for(i in 1:N){
-    vote_pred[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
+    indv_vote[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
     + beta[state_id[i]]*marital[i]));
   }
 }
