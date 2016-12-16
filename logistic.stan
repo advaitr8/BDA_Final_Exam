@@ -63,7 +63,7 @@ generated quantities{
   }
   //posterior predictive check
   for(i in 1:N){
-    indv_vote[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
+    indv_vote[i] = bernoulli_rng(inv_logit(alpha[state_id[i]] 
     + beta[state_id[i]]*marital[i]));
   }
 }
