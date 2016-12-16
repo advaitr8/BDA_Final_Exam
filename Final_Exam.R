@@ -10,6 +10,34 @@ setwd("C:/Users/Julian Bautista/Documents/School Stuff/Semesters/4 Fall 2016/App
 
 #number 2 HMC
 source("2_HMC.R")
+#trace plots
+par(mfrow = c(1, 2),
+     mar = c(3, 3, 1, 1),
+     oma = c(.5 , .5, .5, .5) ,
+     mgp = c(2 ,1 ,0))
+plot(fit_hmc$sims[,1,1],type = "l",ylim = c(0,6),col = "darkgreen",
+     xlab = "Iterations",
+     ylab = "Parameter values",
+     main = "Traceplot for 'alpha'")
+lines(fit_hmc$sims[,2,1],type = "l",ylim = c(0,4), col = "red")
+lines(fit_hmc$sims[,3,1],type = "l",ylim = c(0,4), col = "blue")
+lines(fit_hmc$sims[,4,1],type = "l",ylim = c(0,4), col = "orange")
+points(fit_hmc$sims[,1,1][1], pch = 15, col = "darkgreen")
+points(fit_hmc$sims[,2,1][1], pch = 15, col = "red")
+points(fit_hmc$sims[,3,1][1], pch = 15, col = "blue")
+points(fit_hmc$sims[,4,1][1], pch = 15, col = "orange")
+#
+plot(fit_hmc$sims[,1,2],type = "l",ylim = c(-0,1.2),col = "darkgreen",
+     xlab = "Iterations",
+     ylab = "Parameter values",
+     main = "Traceplot for 'beta'")
+lines(fit_hmc$sims[,2,2],type = "l",ylim = c(0,4), col = "red")
+lines(fit_hmc$sims[,3,2],type = "l",ylim = c(0,4), col = "blue")
+lines(fit_hmc$sims[,4,2],type = "l",ylim = c(0,4), col = "orange")
+points(fit_hmc$sims[,1,2][1], pch = 15, col = "darkgreen")
+points(fit_hmc$sims[,2,2][1], pch = 15, col = "red")
+points(fit_hmc$sims[,3,2][1], pch = 15, col = "blue")
+points(fit_hmc$sims[,4,2][1], pch = 15, col = "orange")
 
 #number 3 simulation
 #Generate fake data:
@@ -105,13 +133,24 @@ ggplot(plotter2, aes(gap, obama_per, colour = Legend)) + geom_point() +
   labs(colour = "", x = "Marriage Gap", y = "Obama Vote % 2008", title = "Marriage Gap")
 
 #posterior predictive checks
+marriage$pred <- colMeans(fitted$indv_vote)
 
-par(mfrow=c(8,6), mar=c(.5, .5, 1, 0.2), mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,4,0))
+par(mfrow = c(8,6),
+    mar = c(1, 1, 1, 1),
+    mgp = c(1.5, 0.2, 0),
+    cex = 0.8)
 for(i in 1:48){
-  hist(fitted$gap_pred[,i], 
-        breaks = 15, xlab = NULL, ylab = NULL, 
+  hist(marriage$pred[marriage$id == i], freq = FALSE, 
+        breaks = 60, xlab = NULL, ylab = NULL, yaxt = 'n',
         xaxt = 'n', main = state[i], cex.main = 0.8)
-  abline(v = gap[i], col = "red", cex = 1.2)
+  # axis(1, at = c(0.25, 0.5, 0.75),
+  #      cex.axis = 0.5)
+  abline(v = mean(marriage$party[marriage$marital == 1
+                               & marriage$id == i]),
+         col = "dark green")
+  abline(v = mean(marriage$party[marriage$marital == 0
+                               & marriage$id == i]),
+         col = "blue")
 }
 
 #complete pool vote prediction plots
