@@ -1,0 +1,27 @@
+data{
+  int N;
+  vector[N] marital;
+  int dem[N];
+  int state_id[N];
+  vector[48] mar_pred;
+  int state_id_pred[48];
+}
+parameters{
+  real beta;
+  real alpha;
+}
+model{
+  for(i in 1:N){
+    dem[i] ~ bernoulli_logit(alpha 
+    + beta*marital[i]);
+  }
+ alpha ~ normal(0, 2);
+ beta ~ normal(0, 2);
+}
+generated quantities{
+  vector[48] vote_pred;
+  for(i in 1:48){
+    vote_pred[i] = bernoulli_rng(inv_logit(alpha
+    + beta*mar_pred[i]));
+  }
+}
