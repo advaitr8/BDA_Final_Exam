@@ -2,6 +2,7 @@ library(arm)
 library(rstan)
 library(beepr)
 library(ggthemes)
+library(gridExtra)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 setwd("C:/Users/Julian Bautista/Documents/School Stuff/Semesters/4 Fall 2016/Applied Statistics III/Final Exam/BDA_Final_Exam")
@@ -28,7 +29,8 @@ fitted <- extract(fit1)
 obama_per <- elect$vote_Obama_pct/100
 mar_gap <- marriage %>% 
            group_by(state) %>% 
-           summarise(gap = mean(marital[party == 1]) - mean(marital[party == 0]))
+           summarise(gap = mean(marital[party == 1]) - mean(marital[party == 0]), vote = mean(party))
+obama_vote <- mar_gap$vote
 
 gap <- mar_gap$gap
 
@@ -45,20 +47,36 @@ invlogit(apply(fitted$alpha,2,sd) + apply(fitted$beta,2,sd))
 #             invlogit(colMeans(fitted$alpha))
 # vote_pred <- colMeans(fitted$vote_pred)
 
-#balance plot for vote prediction
-plot(c(1:48), obama_per - vote_pred, ylim = c(-1,1))
-abline(0,0)
+#vote prediction plots
+plotter<- rbind(
+  data.frame(vote = obama_vote, Legend = rep("Data", 48),obama_per),
+  data.frame(vote = vote_pred, Legend = rep("Model", 48),obama_per))
 
+pp<-ggplot(plotter, aes(vote, obama_per, colour = Legend)) + 
+  geom_point() + geom_abline(slope = 1, intercept = 0) +
+  labs(x = "Obama Vote Shares", y = "Predicted Vote Shares", title = "Vote Prediction", colour = "")  + 
+  theme_gdocs() + scale_colour_colorblind() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+#balance plot for vote prediction
 diff_vote <- obama_per - vote_pred
 
-ggplot(NULL, aes(c(1:48), diff_vote)) + 
+b_p<-ggplot(NULL, aes(c(1:48), diff_vote)) + 
   geom_point() + geom_hline(yintercept = 0) + 
-  theme_few() + ylim(-.5,.5) +
-  geom_pointrange(aes(ymax = diff_vote + vote_pred_sd, ymin = diff_vote - vote_pred_sd)) 
+  labs(x = "State Indexes", y = "Difference between Predicted and Actual Votes", title = "Vote Prediction Balance") +
+  theme_gdocs() + scale_colour_colorblind() + ylim(-1,1) +
+  theme(plot.title = element_text(hjust = 0.5))#+
+  #geom_pointrange(aes(ymax = diff_vote + vote_pred_sd, ymin = diff_vote - vote_pred_sd)) 
 
-
+grid.arrange(pp,b_p, ncol = 2)
 
 #plot marriage gap
-plot(gap, obama_per, pch = 16)
-points(gap_pred, obama_per, pch = 16, col = "grey")
+plotter2<- rbind(
+  data.frame(gap = gap, Legend = rep("Actual Marriage Gap", 48),obama_per),
+  data.frame(gap = gap_pred, Legend = rep("Predicted Marriage Gap", 48),obama_per))
+
+ggplot(plotter2, aes(gap, obama_per, colour = Legend)) + geom_point() + 
+  theme_gdocs() + scale_colour_colorblind() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(colour = "", x = "Marriage Gap", y = "Obama Vote % 2008", title = "Marriage Gap")
 
