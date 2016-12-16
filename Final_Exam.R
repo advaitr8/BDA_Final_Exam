@@ -38,7 +38,7 @@ gap <- mar_gap$gap
 gap_pred <- colMeans(fitted$gap_pred)
 vote_pred <- colMeans(fitted$vote_pred)
 pool_pred <- colMeans(fitted$pool_pred)
-gap_pool_pred <- colMeans(fitted$gap_pool_pred)
+gap_pool_pred <- mean(fitted$gap_pool_pred)
 
 #vote_pred_sd <- apply(fitted$vote_pred, 2, sd)
 #vote_pred_sd <- rep(sd(vote_pred),48)
@@ -85,6 +85,15 @@ ggplot(plotter2, aes(gap, obama_per, colour = Legend)) + geom_point() +
         plot.background = element_blank()) +
   labs(colour = "", x = "Marriage Gap", y = "Obama Vote % 2008", title = "Marriage Gap")
 
+#posterior predictive checks
+
+par(mfrow=c(8,6), mar=c(.5, .5, 1, 0.2), mgp=c(1.5,.3,0), tck=-.01, oma=c(0,0,4,0))
+for(i in 1:48){
+  hist(fitted$gap_pred[,i], 
+        breaks = 15, xlab = NULL, ylab = NULL, 
+        xaxt = 'n', main = state[i], cex.main = 0.8)
+  abline(v = gap[i], col = "red", cex = 1.2)
+}
 
 #complete pool vote prediction plots
 plotter3<- rbind(

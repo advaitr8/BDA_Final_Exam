@@ -41,7 +41,7 @@ generated quantities{
   vector[48] vote_pred;
   vector[48] pool_pred;
   vector[48] gap_pred;
-  vector[48] gap_pool_pred;
+  real gap_pool_pred;
   //pred partial pooling model
   for(i in 1:48){
     vote_pred[i] = bernoulli_rng(inv_logit(alpha[state_id_pred[i]] 
@@ -54,12 +54,10 @@ generated quantities{
   
   //pred complete pooling model
   for(i in 1:48){
-    pool_pred[i] = bernoulli_rng(inv_logit(alpha_pool 
-    + beta_pool*mar_pred[i]));
+    pool_pred[i] = bernoulli_rng(inv_logit(alpha_pool + beta_pool*mar_pred[i]));
   }
   //gap partial pooling model
   for(i in 1:48){
-    gap_pool_pred[i] = inv_logit(alpha_pool[i] + beta_pool) - inv_logit(alpha_pool[i]);
+    gap_pool_pred = inv_logit(alpha_pool + beta_pool) - inv_logit(alpha_pool);
   }  
-  
 }
