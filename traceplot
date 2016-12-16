@@ -1,0 +1,42 @@
+par( mfrow = c(2, 2),
+     mar = c(3, 3, 1, 1),
+     oma = c(.5 , .5, .5, .5) ,
+     mgp = c(2 ,1 ,0))
+plot(fit1$sims[,1,1],type = "l",ylim = c(0,13),col = "darkgreen",
+     xlab = "Iterations",
+     ylab = "Parameter values",
+     main = "Traceplot for 'a'")
+lines(fit1$sims[,2,1],type = "l",ylim = c(0,4), col = "red")
+lines(fit1$sims[,3,1],type = "l",ylim = c(0,4), col = "blue")
+lines(fit1$sims[,4,1],type = "l",ylim = c(0,4), col = "gray")
+points(fit1$sims[,1,1][1], pch = 15, col = "darkgreen")
+points(fit1$sims[,2,1][1], pch = 15, col = "red")
+points(fit1$sims[,3,1][1], pch = 15, col = "blue")
+points(fit1$sims[,4,1][1], pch = 15, col = "gray")
+#
+plot(fit1$sims[,1,2],type = "l",ylim = c(-0,2),col = "darkgreen",
+     xlab = "Iterations",
+     ylab = "Parameter values",
+     main = "Traceplot for 'b'")
+lines(fit1$sims[,2,2],type = "l",ylim = c(0,4), col = "red")
+lines(fit1$sims[,3,2],type = "l",ylim = c(0,4), col = "blue")
+lines(fit1$sims[,4,2],type = "l",ylim = c(0,4), col = "gray")
+points(fit1$sims[,1,2][1], pch = 15, col = "darkgreen")
+points(fit1$sims[,2,2][1], pch = 15, col = "red")
+points(fit1$sims[,3,2][1], pch = 15, col = "blue")
+points(fit1$sims[,4,2][1], pch = 15, col = "gray")
+####
+hist(fit1$sims[,,1], breaks = 60, col = "gray", freq = F,
+     xlab = "a values",
+     yaxt = "n",
+     ylab = NA,
+     main = "Posterior distribution of a",
+     xlim = c(0,8))
+abline(v = 2, col = "red ")
+hist(fit1$sims[,,2], breaks = 60, col = "gray", freq = F,
+     xlab = "b values",
+     yaxt = "n",
+     ylab = NA,
+     main = "Posterior distribution of b",
+     xlim = c(0,2))
+abline(v = 0.3, col = "red ")
