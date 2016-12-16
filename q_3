@@ -1,0 +1,22 @@
+#Generate fake data:
+N <- 1
+theta <- 0.1
+sigma <- 1000
+
+mle <- NULL
+y <- rnorm(N, theta, sigma)
+y <- ifelse(y < 0, 0, 
+      ifelse(y > 1, 1, y))
+mle <- (y - theta)^2
+
+#Simulate in Stan
+bayes <- NULL
+fit3 <- stan("/Users/alexpavlakis/Desktop/R/bda_final_3.stan",
+               data = list("N", "y", "sigma"),
+               chains = 3, iter = 100)
+bayes <- (mean(extract(fit3)$theta) - theta)^2
+
+#Show difference between MLE and Bayes
+mle 
+bayes
+mle - bayes
