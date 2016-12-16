@@ -1,6 +1,7 @@
 library(arm)
 library(rstan)
 library(beepr)
+library(ggthemes)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 setwd("C:/Users/Julian Bautista/Documents/School Stuff/Semesters/4 Fall 2016/Applied Statistics III/Final Exam/BDA_Final_Exam")
@@ -31,15 +32,33 @@ mar_gap <- marriage %>%
 
 gap <- mar_gap$gap
 
-gap_pred <- invlogit(colMeans(fitted$alpha) + 
-                     colMeans(fitted$beta)) - 
-            invlogit(colMeans(fitted$alpha))
+#pulling from stan
+gap_pred <- colMeans(fitted$gap_pred)
 vote_pred <- colMeans(fitted$vote_pred)
+vote_pred_sd <- apply(fitted$vote_pred, 2, sd)
+vote_pred_sd <- rep(sd(vote_pred),48)
+
+invlogit(apply(fitted$alpha,2,sd) + apply(fitted$beta,2,sd))
+
+# gap_pred <- invlogit(colMeans(fitted$alpha) + 
+#                      colMeans(fitted$beta)) - 
+#             invlogit(colMeans(fitted$alpha))
+# vote_pred <- colMeans(fitted$vote_pred)
 
 #balance plot for vote prediction
 plot(c(1:48), obama_per - vote_pred, ylim = c(-1,1))
 abline(0,0)
 
+diff_vote <- obama_per - vote_pred
+
+ggplot(NULL, aes(c(1:48), diff_vote)) + 
+  geom_point() + geom_hline(yintercept = 0) + 
+  theme_few() + ylim(-.5,.5) +
+  geom_pointrange(aes(ymax = diff_vote + vote_pred_sd, ymin = diff_vote - vote_pred_sd)) 
+
+
+
 #plot marriage gap
 plot(gap, obama_per, pch = 16)
 points(gap_pred, obama_per, pch = 16, col = "grey")
+
